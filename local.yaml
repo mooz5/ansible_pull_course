@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  
+  tasks:
+
+  - name: Updating all packages (Debian family)
+    tags: always
+    ansible.builtin.apt:
+      update_cache: yes
+      upgrade: dist
+    when: ansible_os_family == "Debian"
+
+  - name: Updating all packages (RedHat family)
+    tags: always
+    ansible.builtin.dnf:
+      update_cache: yes
+      update_only: yes
+    when: ansible_os_family == "RedHat"
+
+  - name: Install vim & nano
+    tags: always
+    ansible.builtin.package:
+      name:
+      - vim
+      - nano
+      state: latest
